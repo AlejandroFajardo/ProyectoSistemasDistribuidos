@@ -1,2 +1,3 @@
-# ProyectoSistemasDistribuidos
-Laboratorio de sistemas distribuidos utilizando Docker, node, html y conectando a db
+# titulo 1
+## subitulo
+este es un ejersiocio de prueba para sistemas distribuidos
