@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+    middlleware:
+        container_name: middleware
+        build: ./middleware_server/
+        ports: 
+            - 3000:3000
+        links: 
+            - server1
+            - server2
+            - mongo
+        volumes: 
+        - ./middleware_server/server/server.js:/app/server.js
+        - ./middleware_server/server/package.json:/app/package.json
+        - ./middleware_server/server/models:/app/models
+        - ./middleware_server/server/public:/app/public
+        - ./middleware_server/server/controller:/app/controller
+
+    server1:
+        container_name: server1
+        build: ./main_server
+        ports: 
+            - 3001:3000
+        depends_on: 
+            - mongo
+        volumes: 
+        - ./main_server/server/server.js:/app/server.js
+        - ./main_server/server/package.json:/app/package.json
+        environment: 
+            SERVER_NAME: server1
+    
+    server2:
+        container_name: server2
+        build: ./main_server
+        ports: 
+            - 3002:3000
+        depends_on: 
+            - mongo
+        volumes: 
+        - ./main_server/server/server.js:/app/server.js
+        - ./main_server/server/package.json:/app/package.json
+        environment: 
+            SERVER_NAME: server2
+
+    mongo:
+        image: mongo
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: didier
+            MONGO_INITDB_ROOT_PASSWORD: lanegra
+            MONGO_INITDB_DATABASE: records
+        ports: 
+        - 27017:27017
+        volumes: 
+        - ./db/init.js:/docker-entrypoint-initdb.d/init.js
+        logging:
+            driver: none
+
+
